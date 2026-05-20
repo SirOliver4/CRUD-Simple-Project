@@ -1,5 +1,7 @@
 package com.devsuperior.crudproject.dto;
 
+import com.devsuperior.crudproject.entities.Client;
+
 import java.time.LocalDate;
 
 public class ClientDTO {
@@ -10,22 +12,16 @@ public class ClientDTO {
     private LocalDate birthDate;
     private Integer children;
 
-    public ClientDTO(Long id, String name, String cpf, Double income, LocalDate birthDate, Integer children) {
-        this.id = id;
-        this.name = name;
-        this.cpf = cpf;
-        this.income = income;
-        this.birthDate = birthDate;
-        this.children = children;
+    public ClientDTO(Client client) {
+        this.id = client.getId();
+        this.name = client.getName();
+        this.cpf = client.getCpf();
+        this.income = client.getIncome();
+        this.birthDate = client.getBirthDate();
+        this.children = client.getChildren();
     }
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
+    public ClientDTO (){};
 
     public String getName() {
         return name;
@@ -65,5 +61,13 @@ public class ClientDTO {
 
     public void setChildren(Integer children) {
         this.children = children;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 }

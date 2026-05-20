@@ -1,12 +1,64 @@
 package com.devsuperior.crudproject.services;
 
+import com.devsuperior.crudproject.controllers.interfaces.CrudClient;
+import com.devsuperior.crudproject.dto.ClientDTO;
+import com.devsuperior.crudproject.entities.Client;
 import com.devsuperior.crudproject.repositorys.ClientRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 @Service
-public class ClientService {
+public class ClientService implements CrudClient {
 
     @Autowired
     ClientRepository repository;
+
+
+    @Override
+    public ClientDTO insert(ClientDTO dto) {
+        Client client = new Client();
+        copyClientToClientDTO(client, dto);
+        return new ClientDTO(repository.save(client));
+    }
+
+    @Override
+    public void delete(Long id) {
+        repository.deleteById(id);
+    }
+
+    @Override
+    public ClientDTO findById(Long id) {
+        Client client = repository.findById(id).get();
+        return new ClientDTO(client);
+
+    }
+
+    @Override
+    public Set<ClientDTO> findAll() {
+        List<Client> clients = repository.findAll();
+        Set<ClientDTO> dtos = new HashSet<>(clients.stream().map(x -> new ClientDTO(x)).toList());
+        return dtos;
+    }
+
+    @Transactional
+    @Override
+    public ClientDTO update(Long id, ClientDTO dto) {
+        Client client = repository.getReferenceById(id);
+        copyClientToClientDTO(client, dto);
+        repository.save(client);
+        return new ClientDTO(client);
+    }
+
+    private void copyClientToClientDTO(Client client, ClientDTO dto){
+        client.setName(dto.getName());
+        client.setChildren(dto.getChildren());
+        client.setCpf(dto.getCpf());
+        client.setIncome(dto.getIncome());
+        client.setBirthDate(dto.getBirthDate());
+    }
 }
