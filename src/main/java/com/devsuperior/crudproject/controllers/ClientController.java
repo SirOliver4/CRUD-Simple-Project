@@ -2,6 +2,7 @@ package com.devsuperior.crudproject.controllers;
 
 import com.devsuperior.crudproject.dto.ClientDTO;
 import com.devsuperior.crudproject.services.ClientService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -18,7 +19,7 @@ public class ClientController {
     ClientService service;
 
     @PostMapping
-    public ClientDTO insert(@RequestBody ClientDTO dto){
+    public ClientDTO insert(@RequestBody @Valid ClientDTO dto){
         return service.insert(dto);
     }
 
@@ -38,8 +39,8 @@ public class ClientController {
     }
 
     @PutMapping(value = "/{id}")
-    public ClientDTO update(@PathVariable Long id, @RequestBody ClientDTO dto){
+    public ClientDTO update(@PathVariable Long id, @RequestBody @Valid ClientDTO dto){
         return service.update(id, dto);
     }
-
+// Exceções
 }

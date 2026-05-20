@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.TreeSet;
 
 @Service
 public class ClientService implements CrudClient {
@@ -41,7 +42,7 @@ public class ClientService implements CrudClient {
     @Override
     public Set<ClientDTO> findAll() {
         List<Client> clients = repository.findAll();
-        Set<ClientDTO> dtos = new HashSet<>(clients.stream().map(x -> new ClientDTO(x)).toList());
+        Set<ClientDTO> dtos = new TreeSet<>(clients.stream().map(x -> new ClientDTO(x)).toList());
         return dtos;
     }
 
