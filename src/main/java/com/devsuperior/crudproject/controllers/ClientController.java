@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
-import java.util.Set;
 
 @RestController
 @RequestMapping(value = "/clients")
@@ -21,28 +20,32 @@ public class ClientController {
     ClientService service;
 
     @PostMapping
-    public ClientDTO insert(@RequestBody @Valid ClientDTO dto){
-        return service.insert(dto);
+    public ResponseEntity<ClientDTO> insert(@RequestBody @Valid ClientDTO dto){
+        URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
+                .buildAndExpand(dto.getId())
+                .toUri();
+        return ResponseEntity.created(uri).body(service.insert(dto));
     }
 
     @GetMapping(value = "/{id}")
-    public ClientDTO findById(@PathVariable Long id){
-        return service.findById(id);
+    public ResponseEntity<ClientDTO> findById(@PathVariable Long id){
+        return ResponseEntity.ok(service.findById(id));
     }
 
     @GetMapping
-    public Page<ClientDTO> findAll(Pageable pageable){
-        return service.findAll(pageable);
+    public ResponseEntity<Page<ClientDTO>> findAll(Pageable pageable){
+        return ResponseEntity.ok(service.findAll(pageable));
     }
 
     @DeleteMapping(value = "/{id}")
-    public void delete(@PathVariable Long id){
+    public ResponseEntity<Void> delete(@PathVariable Long id){
         service.delete(id);
+        return ResponseEntity.noContent().build();
     }
 
     @PutMapping(value = "/{id}")
-    public ClientDTO update(@PathVariable Long id, @RequestBody @Valid ClientDTO dto){
-        return service.update(id, dto);
+    public ResponseEntity<ClientDTO> update(@PathVariable Long id, @RequestBody @Valid ClientDTO dto){
+        return ResponseEntity.ok(service.update(id, dto));
     }
 // Exceções
 }

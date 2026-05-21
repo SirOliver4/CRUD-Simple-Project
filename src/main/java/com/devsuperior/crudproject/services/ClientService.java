@@ -4,16 +4,12 @@ import com.devsuperior.crudproject.controllers.interfaces.CrudClient;
 import com.devsuperior.crudproject.dto.ClientDTO;
 import com.devsuperior.crudproject.entities.Client;
 import com.devsuperior.crudproject.repositorys.ClientRepository;
+import com.devsuperior.crudproject.services.exceptions.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.TreeSet;
 
 @Service
 public class ClientService implements CrudClient {
@@ -31,12 +27,16 @@ public class ClientService implements CrudClient {
 
     @Override
     public void delete(Long id) {
-        repository.deleteById(id);
+        if (!repository.existsById(id)){
+            throw new ResourceNotFoundException("Id informado não existe");
+        }else {
+            repository.deleteById(id);
+        }
     }
 
     @Override
     public ClientDTO findById(Long id) {
-        Client client = repository.findById(id).get();
+        Client client = repository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Recurso não encontrado"));
         return new ClientDTO(client);
 
     }
@@ -50,10 +50,14 @@ public class ClientService implements CrudClient {
     @Transactional
     @Override
     public ClientDTO update(Long id, ClientDTO dto) {
-        Client client = repository.getReferenceById(id);
-        copyClientToClientDTO(client, dto);
-        repository.save(client);
-        return new ClientDTO(client);
+        if(!repository.existsById(id)){
+            throw new ResourceNotFoundException("Id não existe");
+        }else {
+            Client client = repository.getReferenceById(id);
+            copyClientToClientDTO(client, dto);
+            repository.save(client);
+            return new ClientDTO(client);
+        }
     }
 
     private void copyClientToClientDTO(Client client, ClientDTO dto){
