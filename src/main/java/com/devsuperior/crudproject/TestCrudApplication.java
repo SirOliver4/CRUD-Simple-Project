@@ -1,18 +1,13 @@
 package com.devsuperior.crudproject;
 
-import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class TestCrudApplication implements CommandLineRunner {
+public class TestCrudApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(TestCrudApplication.class, args);
 	}
 
-	@Override
-	public void run(String... args) throws Exception {
-		System.out.println("Hello World");
-	}
 }

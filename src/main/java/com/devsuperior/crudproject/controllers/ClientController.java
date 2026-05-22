@@ -47,5 +47,4 @@ public class ClientController {
     public ResponseEntity<ClientDTO> update(@PathVariable Long id, @RequestBody @Valid ClientDTO dto){
         return ResponseEntity.ok(service.update(id, dto));
     }
-// Exceções
 }

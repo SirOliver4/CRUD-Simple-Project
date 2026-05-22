@@ -5,6 +5,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.PastOrPresent;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.Size;
+import org.hibernate.validator.constraints.br.CPF;
 
 import java.time.LocalDate;
 
@@ -14,6 +15,7 @@ public class ClientDTO implements Comparable<ClientDTO>{
     @Size(min = 3, max = 20, message = "Nome inválido")
     private String name;
     @NotBlank(message = "Campo precisa ser preenchido")
+    @CPF(message = "CPF inválido")
     private String cpf;
     @Positive(message = "Campo não pode ser negativo")
     private Double income;
